@@ -1,0 +1,8 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore the dist folder, it created by package.json scripts
+dist/
+
+# Ignore the .env files that contains environment variables
+.env

@@ -1,7 +1,7 @@
 import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
-  class User extends Model {
+  class Restaurant extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.User.hasMany(models.Restaurant, {
+      models.Restaurant.belongsTo(models.User, {
         foreignKey: {
           name: "owner_email",
           allowNull: false,
@@ -17,44 +17,46 @@ export default (sequelize, DataTypes) => {
       });
     }
   }
-  User.init(
+  Restaurant.init(
     {
-      email: {
-        primaryKey: true,
-        type: DataTypes.STRING,
-        validate: {
-          isEmail: {
-            msg: "This is not a valid email",
-          },
-        },
-      },
-      names: {
+      category: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isAlpha: {
-            msg: "The names only can contain letters",
-          },
-        },
       },
-      surnames: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          isAlpha: {
-            msg: "The surnames only can contain letters",
-          },
-        },
       },
-      password: {
+      payment_method: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      business_hour: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      tables_availability: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      delivery: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      web_page: {
+        type: DataTypes.STRING,
       },
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "Restaurant",
     }
   );
-  return User;
+  return Restaurant;
 };

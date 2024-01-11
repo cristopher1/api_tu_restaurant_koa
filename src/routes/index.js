@@ -1,13 +1,18 @@
 import Router from "koa-router";
-import { errorRouter } from "./errors/index.js";
-import { authenticationRouter } from "./authentication/index.js";
-import { createUserRouter, userRouter } from "./user/index.js";
+import { errorRouter } from "./errors/router.js";
+import { tokenRouter } from "./authentication/tokenRouter.js";
+import { authenticationRouter } from "./authentication/authenticationRouter.js";
+import { registerRouter } from "./user/registerRouter.js";
+import { userRouter } from "./user/router.js";
 
-const router = new Router();
+const router = new Router({
+  prefix: "/api/v1",
+});
 
-router.use("/api", errorRouter.routes());
-router.use("/api/users", createUserRouter.routes());
-router.use("/api/tokens", authenticationRouter.routes());
-router.use("/api/users", userRouter.routes());
+router.use(errorRouter.routes());
+router.use(registerRouter.routes());
+router.use(tokenRouter.routes());
+router.use(authenticationRouter.routes());
+router.use(userRouter.routes());
 
 export { router as apiRouter };

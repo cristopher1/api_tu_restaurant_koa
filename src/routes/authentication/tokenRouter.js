@@ -31,28 +31,11 @@ const refreshToken = async (ctx) => {
   ctx.status = 200;
 };
 
-const isAuthenticated = async (ctx, next) => {
-  const { token } = ctx.request;
-  if (!token) {
-    ctx.status = 401;
-    return;
-  }
-
-  const userInfo = jwt.verify(token, jwt_secret, {
-    algorithm: jwt_algorithm,
-  });
-  if (userInfo) {
-    ctx.userInfo = userInfo;
-    await next();
-  } else {
-    ctx.status = 401;
-  }
-};
-
-const router = new Router();
+const router = new Router({
+  prefix: "/tokens",
+});
 
 router.post("/", obtainToken);
 router.post("/refresh", refreshToken);
-router.use(isAuthenticated);
 
-export { router as authenticationRouter };
+export { router as tokenRouter };

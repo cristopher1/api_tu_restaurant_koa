@@ -1,34 +1,33 @@
 import Router from "koa-router";
+import { restaurantRouter } from "../restaurants/router.js";
 
-const createUserRouter = new Router();
-const router = new Router();
-
-createUserRouter.post("/", async (ctx) => {
-  const { email, names, surnames, password } = ctx.request.body;
-  const user = {
-    email,
-    names,
-    surnames,
-    password,
-  };
-
-  await ctx.orm.User.create(user);
-
-  ctx.status = 201;
+const router = new Router({
+  prefix: "/users",
 });
 
+router.use(restaurantRouter.routes());
+
 router.put("/", async (ctx) => {
-  const { email } = ctx.userInfo;
+  const { email } = ctx.state.userInfo;
   const { username, surnames } = ctx.request.body;
 
   const updateInfoUser = {
-    email,
     username,
     surnames,
   };
 
-  const user = ctx.orm.User.build(updateInfoUser);
+  const user = ctx.orm.User.findOne({
+    where: {
+      email,
+    },
+  });
+
+  user.username = username;
+  user.surnames = surnames;
+
   await user.save();
+
+  ctx.status = 201;
 });
 
 router.get("/:email", async (ctx) => {
@@ -49,4 +48,4 @@ router.get("/:email", async (ctx) => {
   ctx.status = 404;
 });
 
-export { createUserRouter, router as userRouter };
+export { router as userRouter };

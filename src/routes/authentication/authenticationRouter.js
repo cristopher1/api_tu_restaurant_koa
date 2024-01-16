@@ -1,29 +1,29 @@
-import Router from "koa-router";
-import jwt from "jsonwebtoken";
-import config from "../../config/jwt.js";
+import Router from 'koa-router'
+import jwt from 'jsonwebtoken'
+import config from '../../config/jwt.js'
 
-const { jwt_secret, jwt_algorithm } = config;
+const { JWTSecret, JWTAlgorithm } = config
 
 const isAuthenticated = async (ctx, next) => {
-  const { token } = ctx.request;
+  const { token } = ctx.request
   if (!token) {
-    ctx.status = 401;
-    return;
+    ctx.status = 401
+    return
   }
 
-  const userInfo = jwt.verify(token, jwt_secret, {
-    algorithm: jwt_algorithm,
-  });
+  const userInfo = jwt.verify(token, JWTSecret, {
+    algorithm: JWTAlgorithm,
+  })
   if (userInfo) {
-    ctx.state.userInfo = userInfo;
-    await next();
+    ctx.state.userInfo = userInfo
+    await next()
   } else {
-    ctx.status = 401;
+    ctx.status = 401
   }
-};
+}
 
-const router = new Router();
+const router = new Router()
 
-router.use(isAuthenticated);
+router.use(isAuthenticated)
 
-export { router as authenticationRouter };
+export { router as authenticationRouter }

@@ -1,51 +1,48 @@
-import Router from "koa-router";
-import { restaurantRouter } from "../restaurants/router.js";
+import Router from 'koa-router'
+import { restaurantRouter } from '../restaurant/router.js'
 
-const router = new Router({
-  prefix: "/users",
-});
+const router = new Router()
 
-router.use(restaurantRouter.routes());
+router.use('/restaurants', restaurantRouter.routes())
 
-router.put("/", async (ctx) => {
-  const { email } = ctx.state.userInfo;
-  const { username, surnames } = ctx.request.body;
+router.get('/:userEmail', async (ctx) => {
+  const { userEmail } = ctx.params
 
-  const updateInfoUser = {
-    username,
-    surnames,
-  };
-
-  const user = ctx.orm.User.findOne({
+  const user = await ctx.orm.User.findOne({
     where: {
-      email,
+      email: userEmail,
     },
-  });
+  })
 
-  user.username = username;
-  user.surnames = surnames;
+  if (!user) {
+    ctx.status = 404
+    return
+  }
 
-  await user.save();
+  ctx.status = 200
+  ctx.body = {
+    user,
+  }
+})
 
-  ctx.status = 201;
-});
-
-router.get("/:email", async (ctx) => {
-  const { email } = ctx.params;
+router.put('/', async (ctx) => {
+  const { email } = ctx.state.userInfo
+  const newUserInfo = { ...ctx.request.body }
 
   const user = await ctx.orm.User.findOne({
     where: {
       email,
     },
-  });
+  })
 
-  if (user) {
-    ctx.status = 200;
-    ctx.body = user;
-    return;
+  if (!user) {
+    ctx.status = 404
+    return
   }
 
-  ctx.status = 404;
-});
+  await user.update(newUserInfo)
 
-export { router as userRouter };
+  ctx.status = 201
+})
+
+export { router as userRouter }

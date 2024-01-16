@@ -1,20 +1,26 @@
-import { Model } from "sequelize";
+import { Model } from 'sequelize'
 
 export default (sequelize, DataTypes) => {
   class Restaurant extends Model {
     /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
+     * Helper method for defining associations. This method is not a part of
+     * Sequelize lifecycle. The `models/index` file will call this method
+     * automatically.
      */
     static associate(models) {
       // define association here
       models.Restaurant.belongsTo(models.User, {
         foreignKey: {
-          name: "owner_email",
+          name: 'owner_email',
           allowNull: false,
         },
-      });
+      })
+      models.Restaurant.hasOne(models.Menu, {
+        foreignKey: {
+          name: 'restaurant_id',
+          allowNull: false,
+        },
+      })
     }
   }
   Restaurant.init(
@@ -55,8 +61,8 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Restaurant",
-    }
-  );
-  return Restaurant;
-};
+      modelName: 'Restaurant',
+    },
+  )
+  return Restaurant
+}

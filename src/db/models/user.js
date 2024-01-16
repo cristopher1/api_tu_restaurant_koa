@@ -1,20 +1,20 @@
-import { Model } from "sequelize";
+import { Model } from 'sequelize'
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
     /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
+     * Helper method for defining associations. This method is not a part of
+     * Sequelize lifecycle. The `models/index` file will call this method
+     * automatically.
      */
     static associate(models) {
       // define association here
       models.User.hasMany(models.Restaurant, {
         foreignKey: {
-          name: "owner_email",
+          name: 'owner_email',
           allowNull: false,
         },
-      });
+      })
     }
   }
   User.init(
@@ -24,7 +24,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         validate: {
           isEmail: {
-            msg: "This is not a valid email",
+            msg: 'This is not a valid email',
           },
         },
       },
@@ -33,7 +33,7 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isAlpha: {
-            msg: "The names only can contain letters",
+            msg: 'The names only can contain letters',
           },
         },
       },
@@ -42,7 +42,7 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           isAlpha: {
-            msg: "The surnames only can contain letters",
+            msg: 'The surnames only can contain letters',
           },
         },
       },
@@ -53,8 +53,8 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "User",
-    }
-  );
-  return User;
-};
+      modelName: 'User',
+    },
+  )
+  return User
+}

@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
 export default {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable('Users', {
       email: {
         primaryKey: true,
         type: Sequelize.STRING,
@@ -26,9 +26,9 @@ export default {
         allowNull: false,
         type: Sequelize.DATE,
       },
-    });
+    })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable('Users')
   },
-};
+}
